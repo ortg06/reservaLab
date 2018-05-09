@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AsignaturaActualizarActivity" />
+        <activity android:name=".AsignaturaEliminarActivity" />
+        <activity android:name=".AsignaturaInsertarActivity" />
+        <activity android:name=".AsignaturaMenuActivity"></activity>
     </application>
 
 </manifest>

@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">reservaLab</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    --Menu Activity para Asignatura--
+    <string name="title_activity_asignatura_menu">AsignaturaMenuActivity</string>
+    <string name="title_activity_asignatura_insertar">AsignaturaInsertarActivity</string>
+    <string name="title_activity_asignatura_eliminar">AsignaturaEliminarActivity</string>
+    <string name="title_activity_asignatura_actualizar">AsignaturaActualizarActivity</string>
+    <string name="title_activity_asignatura_consultar">AsignaturaConsultarActivity</string>
+    <string name="alumno_menu">Función a Ejecutar Asignatura</string>
+
+    -- FIN MENU ACTIVITY--
 </resources>
