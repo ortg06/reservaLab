@@ -7,7 +7,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import android.content.Context;
 
 public class ControlBDReservacionLab {
     private static final String[] camposAsignatura=new String[]
@@ -15,8 +14,8 @@ public class ControlBDReservacionLab {
 
 
     private final Context context;
-    private DatabaseHelper DBHelper;
-    private SQLiteDatabase db;
+    private static DatabaseHelper DBHelper;
+    private static SQLiteDatabase db;
     private static final String DROP_TABLE1="DROP TABLE IF EXISTS asignatura;";
 
     public ControlBDReservacionLab (Context ctx){
@@ -66,7 +65,7 @@ public class ControlBDReservacionLab {
             String regInsertados="Registro Insertado Nº=";
             long contador=0;
              //Verificar que no exista asignatura
-             if(verificarIntegridad(asignatura,2))
+             if(verificarIntegridad(asignatura,1))
              {
                  regInsertados="Error al Insertar el registros, Registro Duplicado. Verificar inserción";
 
@@ -87,7 +86,7 @@ public class ControlBDReservacionLab {
            //ACTUALIZAR ASIGNATURA
 
         public String actualizar(Asignatura asignatura){
-             if(verificarIntegridad(asignatura,2)){
+             if(verificarIntegridad(asignatura,1)){
                  String[] id={asignatura.getCodigoAsignatura()};
                  ContentValues cv = new ContentValues();
                  cv.put("codigoAsignatura", asignatura.getCodigoAsignatura());
@@ -104,7 +103,7 @@ public class ControlBDReservacionLab {
             String regAfectados="Filas afectadas=";
             int contador=0;
 
-            if(verificarIntegridad(asignatura,2)){
+            if(verificarIntegridad(asignatura,1)){
                 if (verificarIntegridad(asignatura,1)){
                 contador+=db.delete("asignatura","codigoAsignatura='"+asignatura.getCodigoAsignatura()+"'",null);
             }
@@ -136,7 +135,48 @@ public class ControlBDReservacionLab {
             }
 
         }
+
+        private boolean verificarIntegridad(Object dato, int relacion) throws SQLException{
+            switch (relacion){
+                case 1: //Verifica la existencia de asignatura
+                {  Asignatura asignatura2= (Asignatura)dato;
+                   String[] id = {asignatura2.getCodigoAsignatura()};
+                   abrir();
+                   Cursor c2 = db.query("asignatura", null, "codigoAsignatura=?", id, null,null,null);
+
+                   if(c2.moveToFirst()){
+                       //Se encontro Asignatura
+                       return  true;
+                   }
+                   return false;
+                }
+                default:
+                    return false; }
+
+        }
+
+      public  String llenarBDReservacionLab(){
+
+            //variables para asignatura VA
+            final String[] VAcodigo={"PRN115", "HDP115", "COS115", "MEP115","ANS115"};
+            final String[] VAnombre={"Progamacion 1", "Herramientas de Producctividad", "Comunicaciones", "Metodos probabilisticos", "Analisis Numerico"};
+
+            abrir();
+            db.execSQL("DELETE FROM asignatura;");
+
+
+            Asignatura asignatura = new Asignatura();
+            for(int i=0; i<1; i++){
+                asignatura.setCodigoAsignatura(VAcodigo[i]);
+                asignatura.setNombreAsignatura(VAnombre[i]);
+                insertar(asignatura);
+            }
+
+            cerrar();
+          return "Guardado correctamente";
+      }
     }
+
 
 
 
