@@ -124,7 +124,17 @@ public class ControlBDReservacionLab {
         public Asignatura consultarAsignatura(String codigoAsignatura){
 
             String[] id={codigoAsignatura};
-            Cursor cursor = db.query("asignatura", camposAsignatura, "codigoAsignatura=?", id, null,)
+            Cursor cursor = db.query("alumno",camposAsignatura,"codigoAsignatura=?",id,null,null,null);
+
+            if(cursor.moveToFirst()){
+                Asignatura asignatura = new Asignatura();
+                asignatura.setCodigoAsignatura(cursor.getString(0));
+                asignatura.setNombreAsignatura(cursor.getString(1));
+                return asignatura;
+            } else{
+                return null;
+            }
+
         }
     }
 
