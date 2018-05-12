@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 public class BaseDatosReservacionLabActivity  extends ListActivity{
 
-    String[] menu={"Tabla Asignatura", "Llenar Base de Datos"};
-    String[] activities={"AsignaturaMenuActivity"};
+    String[] menu={"Tabla Ciclo"," Tabla Asignatura", "Llenar Base de Datos"};
+    String[] activities={"CicloMenuActivity","AsignaturaMenuActivity"};
     ControlBDReservacionLab BDhelper;
 
 

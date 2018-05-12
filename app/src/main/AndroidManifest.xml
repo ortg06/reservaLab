@@ -24,7 +24,12 @@
         <activity android:name=".ReservacionInsertarActivity" />
         <activity android:name=".ReservacionActualizarActivity" />
         <activity android:name=".ReservacionEliminarActivity" />
-        <activity android:name=".ReservacionConsultarActivity"></activity>
+        <activity android:name=".ReservacionConsultarActivity" />
+        <activity android:name=".CicloMenuActivity" />
+        <activity android:name=".CicloInsertarActivity" />
+        <activity android:name=".CicloEliminarActivity" />
+        <activity android:name=".CicloActualizarActivity" />
+        <activity android:name=".CicloConsultarActivity"></activity>
     </application>
 
 </manifest>
