@@ -10,8 +10,8 @@ import android.widget.ListView;
 
 public class MainActivity extends ListActivity {
 
-    String[] menu={"Tabla Asignatura", "Reservacion","LLenar Base de Datos"};
-    String[] activities={"AsignaturaMenuActivity","ReservacionMenuActivity"};
+    String[] menu={"Ciclo","Asignatura", "Reservacion","LLenar Base de Datos"};
+    String[] activities={"CicloMenuActivity","AsignaturaMenuActivity","ReservacionMenuActivity"};
 
 
 

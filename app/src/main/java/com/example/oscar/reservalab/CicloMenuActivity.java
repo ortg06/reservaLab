@@ -28,7 +28,7 @@ public class CicloMenuActivity extends ListActivity {
         String nombreValue=activities[position];
         l.getChildAt(position).setBackgroundColor(Color.rgb(255, 255, 153));
         try{
-            Class<?> clase=Class.forName("eisi.fia.ues.sv.basedatoscarnet."+nombreValue);
+            Class<?> clase=Class.forName("com.example.oscar.reservalab."+nombreValue);
             Intent inte = new Intent(this,clase);
             this.startActivity(inte);
         }catch(ClassNotFoundException e){
