@@ -19,7 +19,12 @@
         <activity android:name=".AsignaturaActualizarActivity" />
         <activity android:name=".AsignaturaEliminarActivity" />
         <activity android:name=".AsignaturaInsertarActivity" />
-        <activity android:name=".AsignaturaMenuActivity"></activity>
+        <activity android:name=".AsignaturaMenuActivity" />
+        <activity android:name=".ReservacionMenuActivity" />
+        <activity android:name=".ReservacionInsertarActivity" />
+        <activity android:name=".ReservacionActualizarActivity" />
+        <activity android:name=".ReservacionEliminarActivity" />
+        <activity android:name=".ReservacionConsultarActivity"></activity>
     </application>
 
 </manifest>
