@@ -4,14 +4,45 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 
-    --Menu Activity para Asignatura--
+    --Definir sus Menus aqui--
     <string name="title_activity_asignatura_menu">AsignaturaMenuActivity</string>
+
+    --fin de Menus--
+
+    --Definir sus Activity aqui--
+
+    --CICLO--
+    <string name="title_activity_ciclo_insertar">CicloInsertarActivity</string>
+    <string name="title_activity_ciclo_eliminar">CicloEliminarActivity</string>
+    <string name="title_activity_ciclo_actualizar">CicloActualizarActivity</string>
+    <string name="title_activity_ciclo_consultar">CicloConsultarActivity</string>
+    --CICLO--
+
+    --Asignatura--
     <string name="title_activity_asignatura_insertar">AsignaturaInsertarActivity</string>
     <string name="title_activity_asignatura_eliminar">AsignaturaEliminarActivity</string>
     <string name="title_activity_asignatura_actualizar">AsignaturaActualizarActivity</string>
     <string name="title_activity_asignatura_consultar">AsignaturaConsultarActivity</string>
-    <string name="alumno_menu">Función a Ejecutar Asignatura</string>
+    --Asignatura--
 
+
+
+    --Reservacion--
+    <string name="title_activity_reservacion_insertar">ReservacionInsertarActivity</string>
+    <string name="title_activity_reservacion_actualizar">ReservacionActualizarActivity</string>
+    <string name="title_activity_reservacion_eliminar">ReservacionEliminarActivity</string>
+    <string name="title_activity_reservacion_consultar">ReservacionConsultarActivity</string>
+    --Reservacion--
+
+
+    --fin de Activity--
+
+    <string name="ciclo_menu">Función a Ejecutar Ciclo</string>
+    <string name="alumno_menu">Función a Ejecutar Asignatura</string>
+    <string name="reservacion_menu">Función a Ejecutar Reservacion</string>
+
+
+<<<<<<< HEAD
     --Menu Activity para Profesor--
     <string name="title_activity_profesor_menu">ProfesorMenuActivity</string>
     <string name="title_activity_profesor_insertar">ProfesorInsertarActivity</string>
@@ -30,4 +61,6 @@
     <string name="asignacion_carga_menu">Función a Ejecutar Asignacion Carga</string>
 
     -- FIN MENU ACTIVITY--
+=======
+>>>>>>> origin/master
 </resources>

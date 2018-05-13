@@ -20,6 +20,7 @@
         <activity android:name=".AsignaturaEliminarActivity" />
         <activity android:name=".AsignaturaInsertarActivity" />
         <activity android:name=".AsignaturaMenuActivity" />
+<<<<<<< HEAD
         <activity android:name=".ProfesorMenuActivity" />
         <activity android:name=".ProfesorInsertarActivity" />
         <activity android:name=".ProfesorEliminarActivity" />
@@ -30,6 +31,18 @@
         <activity android:name=".AsignacionCargaActualizarActivity" />
         <activity android:name=".AsignacionCargaConsultarActivity" />
         <activity android:name=".ProfesorConsultarActivity"></activity>
+=======
+        <activity android:name=".ReservacionMenuActivity" />
+        <activity android:name=".ReservacionInsertarActivity" />
+        <activity android:name=".ReservacionActualizarActivity" />
+        <activity android:name=".ReservacionEliminarActivity" />
+        <activity android:name=".ReservacionConsultarActivity" />
+        <activity android:name=".CicloMenuActivity" />
+        <activity android:name=".CicloInsertarActivity" />
+        <activity android:name=".CicloEliminarActivity" />
+        <activity android:name=".CicloActualizarActivity" />
+        <activity android:name=".CicloConsultarActivity"></activity>
+>>>>>>> origin/master
     </application>
 
 </manifest>
