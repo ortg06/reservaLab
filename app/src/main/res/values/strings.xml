@@ -12,5 +12,22 @@
     <string name="title_activity_asignatura_consultar">AsignaturaConsultarActivity</string>
     <string name="alumno_menu">Función a Ejecutar Asignatura</string>
 
+    --Menu Activity para Profesor--
+    <string name="title_activity_profesor_menu">ProfesorMenuActivity</string>
+    <string name="title_activity_profesor_insertar">ProfesorInsertarActivity</string>
+    <string name="title_activity_profesor_eliminar">ProfesorEliminarActivity</string>
+    <string name="title_activity_profesor_actualizar">ProfesorActualizarActivity</string>
+    <string name="title_activity_profesor_consultar">ProfesorConsultarActivity</string>
+    <string name="profesor_menu">Función a Ejecutar Profesor</string>
+
+
+    --Menu Activity para Asignacion de Carga--
+    <string name="title_activity_asignacion_carga_menu">AsignacionCargaMenuActivity</string>
+    <string name="title_activity_asignacion_carga_insertar">AsignacionCargaInsertarActivity</string>
+    <string name="title_activity_asignacion_carga_eliminar">AsignacionCargaEliminarActivity</string>
+    <string name="title_activity_asignacion_carga_actualizar">AsignacionCargaActualizarActivity</string>
+    <string name="title_activity_asignacion_carga_consultar">AsignacionCargaConsultarActivity</string>
+    <string name="asignacion_carga_menu">Función a Ejecutar Asignacion Carga</string>
+
     -- FIN MENU ACTIVITY--
 </resources>

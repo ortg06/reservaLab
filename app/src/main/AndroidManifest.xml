@@ -19,7 +19,17 @@
         <activity android:name=".AsignaturaActualizarActivity" />
         <activity android:name=".AsignaturaEliminarActivity" />
         <activity android:name=".AsignaturaInsertarActivity" />
-        <activity android:name=".AsignaturaMenuActivity"></activity>
+        <activity android:name=".AsignaturaMenuActivity" />
+        <activity android:name=".ProfesorMenuActivity" />
+        <activity android:name=".ProfesorInsertarActivity" />
+        <activity android:name=".ProfesorEliminarActivity" />
+        <activity android:name=".ProfesorActualizarActivity" />
+        <activity android:name=".AsignacionCargaMenuActivity" />
+        <activity android:name=".AsignacionCargaInsertarActivity" />
+        <activity android:name=".AsignacionCargaEliminarActivity" />
+        <activity android:name=".AsignacionCargaActualizarActivity" />
+        <activity android:name=".AsignacionCargaConsultarActivity" />
+        <activity android:name=".ProfesorConsultarActivity"></activity>
     </application>
 
 </manifest>
