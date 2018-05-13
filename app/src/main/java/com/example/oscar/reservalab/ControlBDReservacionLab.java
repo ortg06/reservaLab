@@ -12,7 +12,7 @@ public class ControlBDReservacionLab{
 
     private static final String[] camposCiclo=new String[] {"numCiclo", "anio"};
     private static final String[] camposAsignatura=new String[] {"codigoAsignatura","nombreAsignatura", "numCiclo"};
-
+    private static final String[] camposReservacion=new String[] {"idReservacion","codLaboratorio",  "idProfesor"};
 
 
 
@@ -21,7 +21,7 @@ public class ControlBDReservacionLab{
     private SQLiteDatabase db;
     private static final String DROP_TABLE1 ="DROP TABLE IF EXISTS asignatura; ";
     private static final String DROP_TABLE2 ="DROP TABLE IF EXISTS ciclo; ";
-
+    private static final String DROP_TABLE3 ="DROP TABLE IF EXISTS reservacion; ";
 
     public ControlBDReservacionLab(Context ctx) {
         this.context = ctx;
@@ -44,6 +44,7 @@ public class ControlBDReservacionLab{
             try{
                 db.execSQL("CREATE TABLE asignatura(codigoAsignatura VARCHAR(10) NOT NULL PRIMARY KEY, nombreAsignatura VARCHAR(30) NOT NULL, numCiclo VARCHAR(2) NOT NULL);");
                 db.execSQL("CREATE TABLE ciclo(numCiclo VARCHAR(2) NOT NULL PRIMARY KEY, anio VARCHAR(4) NOT NULL);");
+                db.execSQL("CREATE TABLE reservacion(idReservacion INTEGER NOT NULL PRIMARY KEY, codLaboratorio VARCHAR(10) NOT NULL, idProfesor VARCHAR(10) NOT NULL);");
             }catch(SQLException e){
                 e.printStackTrace();
             }
@@ -59,7 +60,7 @@ public class ControlBDReservacionLab{
                 //Message.message(context,"OnUpgrade");
                 db.execSQL(DROP_TABLE1);
                 db.execSQL(DROP_TABLE2);
-
+                db.execSQL(DROP_TABLE3);
                 onCreate(db);
             }catch (Exception e) {
                 //Message.message(context,""+e);
@@ -120,6 +121,29 @@ public class ControlBDReservacionLab{
          return  regInsertados;
      }
 
+    //Insertar Reservacion
+    public String insertar(Reservacion reservacion){
+
+        String regInsertados="Registro Nº= Insertado Correctamente ";
+        long contador=0;
+
+        if(verificarIntegridad(reservacion,5)) {  // 1 Verificar integridad referencial
+                if(verificarIntegridad(reservacion,6))// 2 Verificar registro duplicado
+                { regInsertados= "Error al Insertar el registro, Ya existe esta reservacion. Verificar"; }
+                else { ContentValues reservaciones = new ContentValues();
+                reservaciones.put("idReservacion", reservacion.getIdReservacion());
+                reservaciones.put("codLaboratorio", reservacion.getCodLaboratorio());
+                reservaciones.put("idProfesor", reservacion.getIdProfesor());
+
+                contador=db.insert("reservacion", null, reservaciones); }
+            }  else { regInsertados= "Error al Insertar el registro, Registro sin referencias. Verificar inserción"; }
+
+        regInsertados=regInsertados+contador;
+        return regInsertados;
+
+    }
+
+
     //ACTUALIZAR ASIGNATURA
 
     public String actualizar(Asignatura asignatura){
@@ -151,6 +175,20 @@ public class ControlBDReservacionLab{
         }
     }
 
+//Actualizar reservacion
+    public String actualizar(Reservacion reservacion){
+        if(verificarIntegridad(reservacion,6)){
+            String[] id={reservacion.getIdReservacion()};
+            ContentValues cv = new ContentValues();
+            cv.put("idReservacion", reservacion.getIdReservacion());
+            cv.put("codLaboratorio", reservacion.getCodLaboratorio());
+            cv.put("idProfesor", reservacion.getIdProfesor());
+            db.update("reservacion", cv, "idReservacion=?", id);
+            return "Registro Actualizado Correctamente";
+        }else{
+            return "Registro con código de Asignatura"+ reservacion.getIdReservacion()+ "No existe";
+        }
+    }
 
     // Eliminar Asignatura
     public String eliminar(Asignatura asignatura){
@@ -188,6 +226,19 @@ public class ControlBDReservacionLab{
         return regAfectados;
     }
 
+
+    // Eliminar Reservacion
+    public String eliminar(Reservacion reservacion){
+
+        String regAfectados="filas afectadas= "; int contador=0;
+        // 2 Verificar registro que exista
+        if(verificarIntegridad(reservacion, 6)) { String where="idReservacion='"+reservacion.getIdReservacion()+"'";
+            contador+=db.delete("reservacion", where, null);
+            regAfectados+=contador;
+            return regAfectados;
+        } else { return "Registro no Existe"; }
+    }
+
     //CONSULTAR ASIGNATURA
     public Asignatura consultarAsignatura(String codigoAsignatura, String nombreAsignatura, String numCiclo){
 
@@ -217,6 +268,25 @@ public class ControlBDReservacionLab{
             ciclo.setNumCiclo(cursor.getString(0));
             ciclo.setAnio(cursor.getString(1));
             return ciclo;
+        } else{
+            return null;
+        }
+
+    }
+
+
+    //CONSULTAR ASIGNATURA
+    public Reservacion consultarReservacion(String idreservacion, String codLaboratorio, String idProfesor){
+
+        String[] id={idreservacion,codLaboratorio, idProfesor};
+        Cursor cursor = db.query("reservacion",camposReservacion,"codLaboratorio =? AND idProfesor=?", id, null, null, null);
+
+        if(cursor.moveToFirst()){
+            Reservacion reservacion = new Reservacion();
+            reservacion.setIdReservacion(cursor.getString(0));
+            reservacion.setCodLaboratorio(cursor.getString(1));
+            reservacion.setIdProfesor(cursor.getString(2));
+            return reservacion;
         } else{
             return null;
         }
@@ -261,6 +331,28 @@ public class ControlBDReservacionLab{
                 else return false;
             }
 
+            case 5: { // Verifica que al insertar una reservacion exista un laboratorio y profesor
+                Reservacion reservacion = (Reservacion)dato;
+                String[] id1 = {reservacion.getCodLaboratorio()}; //Verifica que exista laboratorio
+                String[] id2 = {reservacion.getIdProfesor()}; //Verifica que exista profesor
+
+                abrir();
+                Cursor cursor1 = db.query("laboratorio", null, "codLaboratorio = ?", id1, null, null, null);
+                Cursor cursor2 = db.query("profesor", null, "idProfesor = ?", id1, null, null, null);
+
+                if(cursor1.moveToFirst() && cursor2.moveToFirst()){ //Se encontraron datos ||
+                    return true;
+                } return false;
+            }
+            case 6:{
+                //Verificar que exista reservacion
+                Reservacion reservacion2 = (Reservacion) dato;
+                String[] id = {reservacion2.getIdReservacion()};
+                abrir();
+                Cursor c2 = db.query("reservacion", null, "idReservacion = ?", id, null, null, null);
+                if(c2.moveToFirst()){ //Se encontro reservacion
+                    return true; }
+            }
 
             default:
                 return false; }
