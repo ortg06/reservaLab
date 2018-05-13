@@ -5,31 +5,40 @@ package com.example.oscar.reservalab;
  */
 
 public class Ciclo {
-
-    private String numCiclo;
-    private String anio;
+    private Integer idCiclo;
+    private Integer numCiclo;
+    private Integer anio;
 
     public Ciclo() {
     }
 
-    public Ciclo(String numCiclo, String anio) {
+    public Ciclo(Integer idCiclo, Integer numCiclo, Integer anio) {
+        this.idCiclo = idCiclo;
         this.numCiclo = numCiclo;
         this.anio = anio;
     }
 
-    public String getNumCiclo() {
+    public Integer getIdCiclo() {
+        return idCiclo;
+    }
+
+    public void setIdCiclo(Integer idCiclo) {
+        this.idCiclo = idCiclo;
+    }
+
+    public Integer getNumCiclo() {
         return numCiclo;
     }
 
-    public void setNumCiclo(String numCiclo) {
+    public void setNumCiclo(Integer numCiclo) {
         this.numCiclo = numCiclo;
     }
 
-    public String getAnio() {
+    public Integer getAnio() {
         return anio;
     }
 
-    public void setAnio(String anio) {
+    public void setAnio(Integer anio) {
         this.anio = anio;
     }
 }

@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ControlBDReservacionLab{
 
-    private static final String[] camposCiclo=new String[] {"numCiclo", "anio"};
+    private static final String[] camposCiclo=new String[] {"idCiclo","numCiclo", "anio"};
     private static final String[] camposAsignatura=new String[] {"codigoAsignatura","nombreAsignatura", "numCiclo"};
 
 
@@ -42,8 +42,8 @@ public class ControlBDReservacionLab{
           @Override
         public void onCreate (SQLiteDatabase db){
             try{
-                db.execSQL("CREATE TABLE asignatura(codigoAsignatura VARCHAR(10) NOT NULL PRIMARY KEY, nombreAsignatura VARCHAR(30) NOT NULL, numCiclo VARCHAR(2) NOT NULL);");
-                db.execSQL("CREATE TABLE ciclo(numCiclo VARCHAR(2) NOT NULL PRIMARY KEY, anio VARCHAR(4) NOT NULL);");
+                db.execSQL("CREATE TABLE asignatura(codigoAsignatura VARCHAR(10) NOT NULL PRIMARY KEY, nombreAsignatura VARCHAR(30) NOT NULL, idCiclo INTEGER NOT NULL);");
+                db.execSQL("CREATE TABLE ciclo(idCiclo Integer NOT NULL PRIMARY KEY, numCiclo Integer NOT NULL, anio Integer NOT NULL);");
             }catch(SQLException e){
                 e.printStackTrace();
             }
@@ -83,18 +83,20 @@ public class ControlBDReservacionLab{
 
         String regInsertados="Registro Insertado Nº= ";
         long contador=0;
-         if(verificarIntegridad(asignatura,1)) {  // 1 Verificar integridad referencial
-             if(verificarIntegridad(asignatura,3))// 2 Verificar registro duplicado
-             { regInsertados= "Error al Insertar el registro, Registro Duplicado. Verificar inserción"; }
-             else { ContentValues asignaturas = new ContentValues();
-                 asignaturas.put("codigoAsignatura", asignatura.getCodigoAsignatura());
-                 asignaturas.put("nombreAsignatura", asignatura.getNombreAsignatura());
-                 asignaturas.put("numCiclo", asignatura.getNumCiclo());
+        ContentValues asig = new ContentValues();
+        asig.put("codigoAsignatura", asignatura.getCodigoAsignatura());
+        asig.put("nombreAsignatura", asignatura.getNombreAsignatura());
+        asig.put("idCiclo", asignatura.getIdCiclo());
 
-             contador=db.insert("asignatura", null, asignaturas); } }
-             else { regInsertados= "Error al Insertar el registro, Registro sin referencias. Verificar inserción"; }
-             regInsertados=regInsertados+contador;
-         return regInsertados;
+        contador=db.insert("asignatura", null, asig);
+        if(contador==-1 || contador==0)
+        {
+            regInsertados= "Error al Insertar el registro, Registro Duplicado. Verificar inserción";
+        }
+        else {
+            regInsertados=regInsertados+contador;
+        }
+        return regInsertados;
 
     }
 
@@ -112,6 +114,7 @@ public class ControlBDReservacionLab{
          else
          {
              ContentValues cicl = new ContentValues();
+             cicl.put("idCiclo", ciclo.getIdCiclo());
              cicl.put("numCiclo", ciclo.getNumCiclo());
              cicl.put("anio", ciclo.getAnio());
              contador=db.insert("ciclo", null, cicl);
@@ -128,7 +131,7 @@ public class ControlBDReservacionLab{
             ContentValues cv = new ContentValues();
             cv.put("codigoAsignatura", asignatura.getCodigoAsignatura());
             cv.put("nombreAsignatura", asignatura.getNombreAsignatura());
-            cv.put("numCiclo", asignatura.getNumCiclo());
+            cv.put("idCiclo", asignatura.getIdCiclo());
             db.update("asignatura", cv, "codigoAsignatura=?", id);
             return "Registro Actualizado Correctamente";
         }else{
@@ -139,12 +142,13 @@ public class ControlBDReservacionLab{
     //ACTUALIZAR CICLO
     public String actualizar(Ciclo ciclo){
         if(verificarIntegridad(ciclo,2)){
-            String[] id={ciclo.getNumCiclo()};
+            String[] id={Integer.toString(ciclo.getIdCiclo())};
             ContentValues cv = new ContentValues();
+            cv.put("idCiclo", ciclo.getIdCiclo());
             cv.put("numCiclo", ciclo.getNumCiclo());
             cv.put("anio", ciclo.getAnio());
 
-            db.update("ciclo", cv, "numCiclo=?", id);
+            db.update("ciclo", cv, "idCiclo=?", id);
             return "Registro Actualizado Correctamente";
         }else{
             return "Registro con código de Asignatura"+ ciclo.getNumCiclo()+ "No existe";
@@ -158,7 +162,7 @@ public class ControlBDReservacionLab{
         String regAfectados="filas afectadas= "; int contador=0;
         // 2 Verificar registro que exista
         if(verificarIntegridad(asignatura, 3)) { String where="codigoAsignatura='"+asignatura.getCodigoAsignatura()+"'";
-        where=where+" AND numCiclo='"+asignatura.getNumCiclo()+"'";
+        where=where+" AND idCiclo='"+asignatura.getIdCiclo()+"'";
         contador+=db.delete("asignatura", where, null);
         regAfectados+=contador;
         return regAfectados;
@@ -174,14 +178,14 @@ public class ControlBDReservacionLab{
         if(verificarIntegridad(ciclo,2)){
             //Si tiene materias relacionadas, se eliminan primero
             if (verificarIntegridad(ciclo,4)){
-                contador+=db.delete("ciclo","numCiclo='"+ciclo.getNumCiclo()+"'",null);
+                contador+=db.delete("ciclo","idCiclo='"+ciclo.getIdCiclo()+"'",null);
             }
-            contador+=db.delete("asignatura","codigoAsignatura='"+ciclo.getNumCiclo()+"'", null);
+            contador+=db.delete("asignatura","codigoAsignatura='"+ciclo.getIdCiclo()+"'", null);
             regAfectados+=contador;
         }
 
         else{
-            return "Registro con código de Asignatura" +ciclo.getNumCiclo()+ "no existe";
+            return "Registro con código de Asignatura" +ciclo.getIdCiclo()+ "no existe";
 
         }
 
@@ -189,16 +193,18 @@ public class ControlBDReservacionLab{
     }
 
     //CONSULTAR ASIGNATURA
-    public Asignatura consultarAsignatura(String codigoAsignatura, String nombreAsignatura, String numCiclo){
-
-        String[] id={codigoAsignatura, nombreAsignatura, numCiclo};
-        Cursor cursor = db.query("asignatura",camposAsignatura,"numCiclo =? AND codigoAsignatura=?", id, null, null, null);
+    public Asignatura consultarAsignatura(String codigoAsignatura, String nombreAsignatura, Integer idCiclo){
+        String idciclo;
+        idciclo=Integer.toString(idCiclo);
+        String[] id={codigoAsignatura, nombreAsignatura, idciclo};
+        Cursor cursor = db.query("asignatura",camposAsignatura,"idCiclo =? AND codigoAsignatura=?", id, null, null, null);
 
         if(cursor.moveToFirst()){
             Asignatura asignatura = new Asignatura();
             asignatura.setCodigoAsignatura(cursor.getString(0));
             asignatura.setNombreAsignatura(cursor.getString(1));
-            asignatura.setNumCiclo(cursor.getString(2));
+            asignatura.setIdCiclo(cursor.getInt(2));
+
             return asignatura;
         } else{
             return null;
@@ -207,15 +213,19 @@ public class ControlBDReservacionLab{
     }
 
     //CONSULTAR CICLO
-    public Ciclo consultarCiclo(String numCiclo){
+    public Ciclo consultarCiclo(Integer idCiclo){
 
-        String[] id={numCiclo};
-        Cursor cursor = db.query("ciclo",camposCiclo,"numCiclo=?",id,null,null,null);
+        String idciclo;
+        idciclo=Integer.toString(idCiclo);
+
+        String[] id={idciclo};
+        Cursor cursor = db.query("ciclo",camposCiclo,"idCiclo=?",id,null,null,null);
 
         if(cursor.moveToFirst()){
             Ciclo ciclo = new Ciclo();
-            ciclo.setNumCiclo(cursor.getString(0));
-            ciclo.setAnio(cursor.getString(1));
+            ciclo.setIdCiclo(cursor.getInt(0));
+            ciclo.setNumCiclo(cursor.getInt(1));
+            ciclo.setAnio(cursor.getInt(2));
             return ciclo;
         } else{
             return null;
@@ -227,10 +237,10 @@ public class ControlBDReservacionLab{
         switch (relacion){
             case 1: { // Verifica que al insertar Asignatura exista ciclo
                 Asignatura asignatura = (Asignatura)dato;
-                String[] id1 = {asignatura.getNumCiclo()}; //Verifica que exista ciclo
+                String[] id1 = {Integer.toString(asignatura.getIdCiclo())}; //Verifica que exista ciclo
 
                 abrir();
-                Cursor cursor1 = db.query("ciclo", null, "numCiclo = ?", id1, null, null, null);
+                Cursor cursor1 = db.query("ciclo", null, "idCiclo = ?", id1, null, null, null);
 
                 if(cursor1.moveToFirst()){ //Se encontraron datos ||
                     return true;
@@ -238,9 +248,9 @@ public class ControlBDReservacionLab{
             }
             case 2:{
                 //Verificar que exista ciclo
-                Ciclo ciclo2 = (Ciclo)dato; String[] id = {ciclo2.getNumCiclo()};
+                Ciclo ciclo2 = (Ciclo)dato; String[] id = {Integer.toString(ciclo2.getNumCiclo())};
                 abrir();
-                Cursor c2 = db.query("ciclo", null, "numCiclo = ?", id, null, null, null);
+                Cursor c2 = db.query("ciclo", null, "idCiclo = ?", id, null, null, null);
                 if(c2.moveToFirst()){ //Se encontro Ciclo
                     return true; }
             }
@@ -255,7 +265,7 @@ public class ControlBDReservacionLab{
 
             case 4: { //Elimina las asignaturas
                 Ciclo ciclo = (Ciclo)dato;
-                Cursor c=db.query(true, "asignatura", new String[] { "carnet" }, "numCiclo='"+ciclo.getNumCiclo()+"'",null, null, null, null, null);
+                Cursor c=db.query(true, "asignatura", new String[] { "codigoAsignatura" }, "idCiclo='"+ciclo.getIdCiclo()+"'",null, null, null, null, null);
                 if(c.moveToFirst())
                     return true;
                 else return false;
@@ -272,16 +282,32 @@ public class ControlBDReservacionLab{
         //variables para asignatura VA
         final String[] VAcodigo={"PRN115", "HDP115", "COS115", "MEP115","ANS115"};
         final String[] VAnombre={"Progamacion 1", "Herramientas de Producctividad", "Comunicaciones", "Metodos probabilisticos", "Analisis Numerico"};
+        final Integer[] VAnumCiclo={01,02};
+
+        //Variables para Ciclo VC
+        final Integer[] VCidCiclo={1,2,3,4};
+        final Integer[] VCnumCico={01,02};
+        final Integer[] VCanio={2017, 2018};
 
         abrir();
         db.execSQL("DELETE FROM asignatura;");
+        db.execSQL("DELETE FROM ciclo;");
 
 
         Asignatura asignatura = new Asignatura();
-        for(int i=0; i<1; i++){
+        for(int i=0; i<2; i++){
             asignatura.setCodigoAsignatura(VAcodigo[i]);
             asignatura.setNombreAsignatura(VAnombre[i]);
+            asignatura.setIdCiclo(VAnumCiclo[i]);
             insertar(asignatura);
+        }
+
+        Ciclo ciclo = new Ciclo();
+        for(int i=0; i<2; i++){
+            ciclo.setIdCiclo(VCidCiclo[i]);
+            ciclo.setNumCiclo(VCnumCico[i]);
+            ciclo.setAnio(VCanio[i]);
+            insertar(ciclo);
         }
 
         cerrar();

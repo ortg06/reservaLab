@@ -5,23 +5,15 @@ public class Asignatura {
 
     private String codigoAsignatura;
     private String nombreAsignatura;
-    private String numCiclo;
-
-    public Asignatura(String codigoAsignatura, String nombreAsignatura, String numCiclo) {
-        this.codigoAsignatura = codigoAsignatura;
-        this.nombreAsignatura=nombreAsignatura;
-        this.numCiclo=numCiclo;
-    }
+    private Integer idCiclo;
 
     public Asignatura() {
     }
 
-    public String getNumCiclo() {
-        return numCiclo;
-    }
-
-    public void setNumCiclo(String numCiclo) {
-        this.numCiclo = numCiclo;
+    public Asignatura(String codigoAsignatura, String nombreAsignatura, Integer idCiclo) {
+        this.codigoAsignatura = codigoAsignatura;
+        this.nombreAsignatura = nombreAsignatura;
+        this.idCiclo = idCiclo;
     }
 
     public String getCodigoAsignatura() {
@@ -39,5 +31,12 @@ public class Asignatura {
     public void setNombreAsignatura(String nombreAsignatura) {
         this.nombreAsignatura = nombreAsignatura;
     }
-}
 
+    public Integer getIdCiclo() {
+        return idCiclo;
+    }
+
+    public void setIdCiclo(Integer idCiclo) {
+        this.idCiclo = idCiclo;
+    }
+}
